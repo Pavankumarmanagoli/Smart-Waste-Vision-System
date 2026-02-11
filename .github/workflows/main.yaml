@@ -39,6 +39,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y jq unzip
 
+      - name: Check required secrets exist
+        run: |
+          test -n "${{ secrets.AWS_ACCESS_KEY_ID }}" && echo "AWS_ACCESS_KEY_ID OK" || (echo "AWS_ACCESS_KEY_ID MISSING" && exit 1)
+          test -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}" && echo "AWS_SECRET_ACCESS_KEY OK" || (echo "AWS_SECRET_ACCESS_KEY MISSING" && exit 1)
+          test -n "${{ secrets.AWS_REGION }}" && echo "AWS_REGION OK" || (echo "AWS_REGION MISSING" && exit 1)
+          test -n "${{ secrets.ECR_REPOSITORY_NAME }}" && echo "ECR_REPOSITORY_NAME OK" || (echo "ECR_REPOSITORY_NAME MISSING" && exit 1)
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -69,6 +76,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Check required secrets exist
+        run: |
+          test -n "${{ secrets.AWS_ACCESS_KEY_ID }}" && echo "AWS_ACCESS_KEY_ID OK" || (echo "AWS_ACCESS_KEY_ID MISSING" && exit 1)
+          test -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}" && echo "AWS_SECRET_ACCESS_KEY OK" || (echo "AWS_SECRET_ACCESS_KEY MISSING" && exit 1)
+          test -n "${{ secrets.AWS_REGION }}" && echo "AWS_REGION OK" || (echo "AWS_REGION MISSING" && exit 1)
+          test -n "${{ secrets.ECR_REPOSITORY_NAME }}" && echo "ECR_REPOSITORY_NAME OK" || (echo "ECR_REPOSITORY_NAME MISSING" && exit 1)
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -77,11 +91,12 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Pull latest image
         run: |
-          docker pull "${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest"
+          docker pull "${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest"
 
       - name: Stop and remove container if running
         run: |
@@ -96,7 +111,7 @@ jobs:
             -e AWS_ACCESS_KEY_ID='${{ secrets.AWS_ACCESS_KEY_ID }}' \
             -e AWS_SECRET_ACCESS_KEY='${{ secrets.AWS_SECRET_ACCESS_KEY }}' \
             -e AWS_REGION='${{ secrets.AWS_REGION }}' \
-            "${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest"
+            "${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest"
 
       - name: Clean previous images and containers
         run: |
