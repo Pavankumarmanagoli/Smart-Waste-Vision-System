@@ -1,0 +1,23 @@
+# macOS files
+.DS_Store
+**/.DS_Store
+
+# Python environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ML folder you don’t want to push
+yolov5/
+
+# Jupyter / temp files
+.ipynb_checkpoints/
+*.log
+*.tmp
+
