@@ -32,14 +32,15 @@ Waste sorting is a practical sustainability challenge. This project demonstrates
 
 ---
 
-## System Architecture
+## System Architecture  
 
-The repository includes architecture and flowchart assets in `images/`:
+![Architecture](images/Architecture.png)  
 
-- `images/Architecture.png`
-- `images/flowchart_1.png`
-- `images/flowchart_2.png`
-- `images/flowchart_3.png`
+Flow diagrams:  
+- ![Flowchart 1](images/flowchart_1.png)  
+- ![Flowchart 2](images/flowchart_2.png)  
+- ![Flowchart 3](images/flowchart_3.png)  
+
 
 These diagrams represent the high-level lifecycle from training data to deployed inference service.
 
@@ -255,4 +256,4 @@ Production-oriented flow for this project:
 
 ## License
 
-Add your preferred license (e.g., MIT, Apache-2.0) in a dedicated `LICENSE` file.
+This repository is licensed under the terms in `MIT LICENSE`.
